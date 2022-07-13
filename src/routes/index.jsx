@@ -15,9 +15,9 @@ const Routes = () => {
     <Router>
       <ReactRoutes>
         <Route path="/" element={<Favorite />} />
-        <Route path="/login" element={<Login />} />
+        <Route path="login" element={<Login />} />
 
-        <Route path="/*" element={<NotFound />} />
+        <Route path="*" element={<NotFound />} />
       </ReactRoutes>
     </Router>
   );

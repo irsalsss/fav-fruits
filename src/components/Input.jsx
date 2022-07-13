@@ -1,15 +1,15 @@
 import React from 'react';
 import { Input as InputAntd } from 'antd';
 import clsx from 'clsx';
-import Icon from './Icon';
 import Text from './Text';
 
 const Input = ({
   value,
+  type,
   label,
+  name,
   description,
   onChange,
-  onClear,
   className,
   wrapperClassname,
   placeholder,
@@ -17,12 +17,11 @@ const Input = ({
 }) => {
   return (
     <div>
-      <div className="flex mb-[8px]">
+      <div className="flex">
         {label && (
           <Text
-            type="h7-600"
+            level={5}
             value={label}
-            className="ml-[16px]"
           />
         )}
         {isRequired && (
@@ -31,10 +30,12 @@ const Input = ({
       </div>
       <div className={clsx('relative', wrapperClassname)}>
         <InputAntd
+          name={name}
           value={value}
+          type={type}
           onChange={onChange}
           placeholder={placeholder}
-          className={clsx('custom-ant-input', className, onClear && 'pr-36px')}
+          className={clsx('custom-ant-input', className)}
         />
         {description && (
           <Text
@@ -44,34 +45,21 @@ const Input = ({
             color="grey-40"
           />
         )}
-        {onClear && (
-          <div
-            tabIndex={0}
-            role="button"
-            className="absolute top-[12px] right-[12px]"
-            onClick={onClear}
-          >
-            <Icon
-              icon="close"
-              iconClass="h-[24px] w-[24px]"
-              iconColor="light-grey-30"
-            />
-          </div>
-        )}
       </div>
     </div>
   );
 };
 
 Input.defaultProps = {
+  type: '',
   value: '',
   label: '',
+  name: '',
   description: '',
   className: '',
   wrapperClassname: '',
   placeholder: '',
   onChange: undefined,
-  onClear: undefined,
   isRequired: false,
 };
 
