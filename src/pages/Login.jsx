@@ -1,14 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { message } from 'antd';
-import Cookies from 'js-cookie'
 import shallow from 'zustand/shallow';
 import { v4 as uuidv4 } from 'uuid';
 import Input from '../components/Input';
 import Text from '../components/Text';
 import Button from '../components/Button';
 import useStoreFavorite from '../store/favorite';
-import { isEmpty } from '../utils/general';
-import { FAKE_USER_DATA } from '../constant/user';
+import { isEmpty, setCookie } from '../utils/general';
+import { login } from '../services/auth';
 
 const Login = () => {
   const [form, setForm] = useState({
@@ -40,19 +39,24 @@ const Login = () => {
     }))
   }
 
-  const onSubmitForm = (e) => {
+  const onSubmitForm = async (e) => {
     e.preventDefault();
-    const user = FAKE_USER_DATA.find((v) => 
-      v.username === form.username && v.password === form.password
-    )
+    const { username, password } = form;
 
+    if (!username || !password) {
+      setError('Username or password should not be empty')
+      return
+    }
+
+    const user = await login(username, password);
     if (!user) {
       setError('Username or password is incorrect')
       return
     }
-    Cookies.set('jwtToken', uuidv4(), { expires: 1 })
+
+    setCookie('jwtToken', uuidv4(), { expires: 1 })
     message.success('Successfully login, please wait a moment', undefined, () => {
-      location.reload();
+      location.href = '/';
     });
   }
 

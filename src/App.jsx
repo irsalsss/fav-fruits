@@ -1,8 +1,21 @@
-import Routes from './routes'
+import {
+  BrowserRouter as Router,
+} from 'react-router-dom';
+import Authenticated from './routes/Authenticated';
+import Unauthenticated from './routes/Unauthenticated';
+import { getCookie } from './utils/general';
 
-function App() {
+const App = () => {
+  const currCookie = getCookie('jwtToken')
+  console.log('currCookie', currCookie)
   return (
-    <Routes />
+    <Router>
+      {currCookie ? (
+        <Authenticated />
+      ) : (
+        <Unauthenticated />
+      )}
+    </Router>
   )
 }
 
