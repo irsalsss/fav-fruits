@@ -7,7 +7,6 @@ import {
 import loadable from '@loadable/component';
 
 const Login = loadable(() => import('../pages/Login'));
-const NotFound = loadable(() => import('../pages/NotFound'));
 
 const Unauthenticated = () => {
   return (

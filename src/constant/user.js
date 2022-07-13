@@ -6,6 +6,6 @@ export const FAKE_USER_DATA = [
 ]
 
 export const INITIAL_USER_FAVORITE = [
-  { username: 'user', currentFruit: FRUIT_LIST, favorite: [] },
-  { username: 'user2', currentFruit: FRUIT_LIST, favorite: [] }
+  { username: 'user', favorite: [] },
+  { username: 'user2', favorite: [] }
 ]

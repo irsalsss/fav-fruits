@@ -15,15 +15,18 @@ const Login = () => {
     password: '',
   })
 
+  const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState("")
 
   const {
     favorite,
-    setInitialFavorite
+    setInitialFavorite,
+    setActiveUser
   } = useStoreFavorite(
     (state) => ({
       favorite: state.favorite,
-      setInitialFavorite: state.setInitialFavorite
+      setInitialFavorite: state.setInitialFavorite,
+      setActiveUser: state.setActiveUser
     }),
     shallow
   );
@@ -41,23 +44,32 @@ const Login = () => {
 
   const onSubmitForm = async (e) => {
     e.preventDefault();
+    setIsLoading(true);
     const { username, password } = form;
 
     if (!username || !password) {
       setError('Username or password should not be empty')
+      setIsLoading(false);
       return
     }
 
     const user = await login(username, password);
     if (!user) {
       setError('Username or password is incorrect')
+      setIsLoading(false);
       return
     }
 
+    delete user.password;
+    setActiveUser(user);
     setCookie('jwtToken', uuidv4(), { expires: 1 })
-    message.success('Successfully login, please wait a moment', undefined, () => {
+
+    message.success('Successfully login, please wait a moment', 2, () => {
       location.href = '/';
     });
+    setTimeout(() => {
+      setIsLoading(false);
+    }, 2000)
   }
 
   useEffect(() => {
@@ -94,6 +106,7 @@ const Login = () => {
           />
         </div>
         <Button
+          isLoading={isLoading}
           onClick={onSubmitForm}
           value="Submit"
         />

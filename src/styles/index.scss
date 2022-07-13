@@ -26,3 +26,8 @@ code {
   box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.15);
   border-radius: 8px;
 }
+
+.ant-btn > .ant-btn-loading-icon .anticon {
+  position: relative;
+  top: -3px;
+}

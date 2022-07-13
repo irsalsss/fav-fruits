@@ -22,4 +22,11 @@ const Button = ({
   )
 }
 
+Button.defaultProps = {
+  type: 'primary',
+  isLoading: false,
+  value: '',
+  size: 'middle',
+};
+
 export default Button
