@@ -30,7 +30,6 @@ Avatar.defaultProps = {
   text: '',
   size: 32,
   avatarColor: '#0047B3',
-  src: null,
   onClick: null,
   wrapperClassname: '',
 };

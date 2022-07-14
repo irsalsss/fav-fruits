@@ -1,27 +1,23 @@
+import clsx from 'clsx';
 import React from 'react';
-import { Typography, message } from 'antd';
-import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
+import { Droppable, Draggable } from "react-beautiful-dnd";
+import { isEmpty } from '../utils/general';
+import EmptyData from './EmptyData';
+import Text from './Text';
 
-const { Text } = Typography;
-
-const DraggableElement = ({ items, onReorder }) => {
-  const reorder = (list, startIndex, endIndex) => {
-    const result = Array.from(list);
-    const [removed] = result.splice(startIndex, 1);
-    result.splice(endIndex, 0, removed);
-  
-    return result;
-  };
-
+const DraggableElement = ({ items = [], label, emptyState }) => {
   const getListStyle = isDraggingOver => ({
-    background: isDraggingOver ? "lightblue" : "lightgrey",
-    padding: 8,
+    background: isDraggingOver ? "lightblue" : "pink",
+    padding: "8px 16px",
+    minHeight: 500,
+    maxHeight: 500,
+    overflowY: 'auto',
+    position: 'relative',
   });
 
   const getItemStyle = (isDragging, draggableStyle) => ({
     userSelect: "none",
-    padding: 8 * 2,
-    margin: "0 0 8px 0",
+    padding: 8,
     background: isDragging ? "#0764a2" : "#4ab2f7",
     justifyContent: 'space-between',
     alignItems: 'center',
@@ -30,50 +26,41 @@ const DraggableElement = ({ items, onReorder }) => {
     ...draggableStyle
   });
 
-  const onDragEnd = (result) => {
-    if (!result.destination) {
-      return;
-    }
-
-    const newItems = reorder(
-      items,
-      result.source.index,
-      result.destination.index
-    );
-
-    if (onReorder) {
-      onReorder(newItems)
-    }
-  }
-
   return (
-    <DragDropContext onDragEnd={onDragEnd}>
-      <Droppable droppableId="droppable">
+    <div className='w-[480px] min-h-500px'>
+      <Text className="uppercase" value={label} level={3} />
+      <Droppable droppableId={label}>
         {(provided, snapshot) => (
           <div
             {...provided.droppableProps}
             ref={provided.innerRef}
             style={getListStyle(snapshot.isDraggingOver)}
           >
-            {items.map((item, index) => (
-              <Draggable key={item.id} draggableId={item.id} index={index}>
-                {(provided, snapshot) => (
-                  <div
-                    ref={provided.innerRef}
-                    {...provided.draggableProps}
-                    {...provided.dragHandleProps}
-                    style={getItemStyle(snapshot.isDragging, provided.draggableProps.style)}
-                  >
-                    <Text>{item.question}</Text>
-                  </div>
-                )}
-              </Draggable>
-            ))}
+            {!isEmpty(items) ? 
+              items.map((item, index) => (
+                <Draggable key={item} draggableId={item} index={index}>
+                  {(provided, snapshot) => (
+                    <div
+                      ref={provided.innerRef}
+                      {...provided.draggableProps}
+                      {...provided.dragHandleProps}
+                      style={getItemStyle(snapshot.isDragging, provided.draggableProps.style)}
+                      className={clsx(index !== items.length - 1 && "mb-[8px]")}
+                    >
+                      <Text value={item} isTitle={false} />
+                    </div>
+                  )}
+                </Draggable>
+            )) : (
+              <div className='absolute top-1/2 left-1/2 translate-x-[-50%] translate-y-[-50%]'>
+                <EmptyData desc={emptyState} />
+              </div>
+            )}
             {provided.placeholder}
           </div>
         )}
       </Droppable>
-    </DragDropContext>
+    </div>
   )
 }
 
