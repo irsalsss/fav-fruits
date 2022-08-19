@@ -8,3 +8,7 @@
 - yarn dev
 - http://localhost:3000/
 ```
+
+## Login with one of these users
+- username: 'user', password: 'test1234'
+- username: 'user2', password: 'pass1234'
